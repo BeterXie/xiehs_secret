@@ -10,13 +10,10 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.Date;
 
 /**
  * @author xiehs
@@ -61,7 +58,7 @@ public class LoginController extends BaseController {
     public void getUser(HttpServletRequest request, HttpServletResponse response) throws Exception{
         String names = request.getParameter("name");
         if(StringUtils.isBlank(names)){
-          this.renderJson(response,"信息有误11");
+          this.renderJson(response,"信息有误");
           return;
         }
         this.logger.info("开始获取用户信息");

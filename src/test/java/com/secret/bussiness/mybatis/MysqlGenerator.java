@@ -39,7 +39,7 @@ public class MysqlGenerator {
 		AutoGenerator mpg = new AutoGenerator().setGlobalConfig(
 				// 全局配置
 				new GlobalConfig().setOutputDir(OUT_PATH+JAVACLASS_PATH)// 输出目录
-						.setFileOverride(true)// 是否覆盖文件
+						.setFileOverride(false)// 是否覆盖文件
 						.setActiveRecord(true)// 开启 activeRecord 模式
 						.setEnableCache(false)// XML 二级缓存
 						.setBaseResultMap(false)// XML ResultMap
