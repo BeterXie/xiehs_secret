@@ -10,5 +10,7 @@ import com.secret.bussiness.alipay.model.Alipay;
  */
 public interface AlipayService {
 
-    String aliPay(Alipay alipay) throws AlipayApiException;
+    String aliPayBypage(Alipay alipay) throws AlipayApiException;
+
+    String aliPayByQrCode(Alipay alipay) throws AlipayApiException;
 }

@@ -16,7 +16,12 @@ import org.springframework.stereotype.Service;
 public class AlipayServiceImpl implements AlipayService {
 
     @Override
-    public String aliPay(Alipay alipay) throws AlipayApiException {
-        return AlipayUtil.connect(alipay);
+    public String aliPayBypage(Alipay alipay) throws AlipayApiException {
+        return AlipayUtil.aliPayBypage(alipay);
+    }
+
+    @Override
+    public String aliPayByQrCode(Alipay alipay) throws AlipayApiException {
+        return AlipayUtil.aliPayByQrCode(alipay);
     }
 }

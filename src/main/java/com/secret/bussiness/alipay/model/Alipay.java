@@ -14,6 +14,8 @@ public class Alipay {
 
     /*商户订单号，必填*/
     private String out_trade_no;
+    /*支付宝订单号*/
+    private String trade_no ="";
     /*订单名称，必填*/
     private String subject;
     /*付款金额，必填*/
