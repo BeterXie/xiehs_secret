@@ -1,10 +1,15 @@
 package com.secret.bussiness.alipay.controller;
 
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.domain.AlipayTradePrecreateModel;
+import com.alipay.api.request.AlipayTradePrecreateRequest;
+import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.secret.bussiness.alipay.model.Alipay;
 import com.secret.bussiness.alipay.service.AlipayService;
 import com.secret.bussiness.base.BaseController;
+import com.secret.bussiness.util.AlipayUtil;
 import com.secret.bussiness.util.QrCodeUtil;
+import com.secret.bussiness.util.StringUtils;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +64,9 @@ public class AlipayController  extends BaseController {
         this.renderHTML(response,form);
     }
 
+
+
+
     /**
      * @name 预下单请求，阿里获取二维码接口
      * @throws AlipayApiException
@@ -110,6 +118,37 @@ public class AlipayController  extends BaseController {
         }
         return map;
     }
+
+    /**
+     * 扫码支付
+     */
+    @RequestMapping(value="/alipay.action",params = "qrCodes")
+    public void tradePrecreatePay(HttpServletRequest request, HttpServletResponse responses) {
+        String subject = "Javen";
+        String totalAmount = "86";
+        String storeId = "123";
+        String notifyUrl = "https://www.baidu.com";
+
+        AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
+        model.setSubject(subject);
+        model.setTotalAmount(totalAmount);
+        model.setStoreId(storeId);
+        model.setTimeoutExpress("5m");
+        model.setOutTradeNo(StringUtils.getOutTradeNo());
+        //流输出
+        ServletOutputStream sos = null;
+        try {
+            String resultStr = AlipayUtil.tradePrecreatePay(model, notifyUrl);
+            JSONObject jsonObject = JSONObject.fromObject(resultStr);
+            String qr_code = jsonObject.getJSONObject("alipay_trade_precreate_response").getString("qr_code");
+            sos = responses.getOutputStream();
+            //生成二维码
+            QrCodeUtil.encode(qr_code, sos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }
