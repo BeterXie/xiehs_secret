@@ -2,8 +2,6 @@ package com.secret.bussiness.alipay.controller;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradePrecreateModel;
-import com.alipay.api.request.AlipayTradePrecreateRequest;
-import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.secret.bussiness.alipay.model.Alipay;
 import com.secret.bussiness.alipay.service.AlipayService;
 import com.secret.bussiness.base.BaseController;
@@ -124,6 +122,7 @@ public class AlipayController  extends BaseController {
      */
     @RequestMapping(value="/alipay.action",params = "qrCodes")
     public void tradePrecreatePay(HttpServletRequest request, HttpServletResponse responses) {
+        this.logger.info("扫码支付ss");
         String subject = "Javen";
         String totalAmount = "86";
         String storeId = "123";
@@ -142,7 +141,7 @@ public class AlipayController  extends BaseController {
             JSONObject jsonObject = JSONObject.fromObject(resultStr);
             String qr_code = jsonObject.getJSONObject("alipay_trade_precreate_response").getString("qr_code");
             sos = responses.getOutputStream();
-            //生成二维码
+            //生成二维码s
             QrCodeUtil.encode(qr_code, sos);
         } catch (Exception e) {
             e.printStackTrace();
