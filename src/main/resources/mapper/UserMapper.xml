@@ -6,8 +6,9 @@
     <sql id="Base_Column_List">
         user_id, nike_name, real_name, sex, age, last_login_date, created_date, modified_date, is_delete
     </sql>
-    <select id="getUser" resultType="com.secret.bussiness.biz.entity.User">
-        select 
+
+    <select id="getUser" parameterType="java.lang.String" resultType="com.secret.bussiness.biz.entity.User">
+        select
         <include refid="Base_Column_List"/>
         from user
         where nike_name=#{userName}

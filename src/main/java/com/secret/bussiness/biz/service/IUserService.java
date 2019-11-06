@@ -1,7 +1,7 @@
 package com.secret.bussiness.biz.service;
 
 import com.secret.bussiness.biz.entity.User;
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -9,12 +9,10 @@ import com.baomidou.mybatisplus.service.IService;
  * </p>
  *
  * @author xiehs
- * @since 2019-10-10
+ * @since 2019-11-06
  */
 public interface IUserService extends IService<User> {
 
-    public User getUser(String name);
-
-
+    User getUser(String name);
 
 }

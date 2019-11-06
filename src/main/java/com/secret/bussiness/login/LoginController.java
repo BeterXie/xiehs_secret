@@ -35,7 +35,7 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "/login.action",params = "login")
     public void Login(HttpServletRequest request, HttpServletResponse response) throws  Exception{
         this.logger.info("开始登录");
-        User user = userService.selectById(4);
+        User user = userService.getById(4);
         String subject = JSONUtil.toJSONString(user);
         try {
             JwtUtil util = new JwtUtil();

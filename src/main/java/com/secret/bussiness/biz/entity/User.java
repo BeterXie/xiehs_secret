@@ -1,17 +1,14 @@
 package com.secret.bussiness.biz.entity;
 
-import com.baomidou.mybatisplus.annotations.TableLogic;
-import com.baomidou.mybatisplus.enums.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.activerecord.Model;
-import java.io.Serializable;
-
-import com.baomidou.mybatisplus.annotations.Version;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -19,51 +16,59 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author xiehs
- * @since 2019-10-10
+ * @since 2019-11-06
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class User extends Model<User> {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID=1L;
 
     /**
      * 主键id
      */
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;
+
     /**
      * 昵称
      */
     private String nikeName;
+
     /**
      * 真实姓名
      */
     private String realName;
+
     /**
      * 性别 0男1女
      */
     private String sex;
+
     /**
      * 年龄
      */
     private Integer age;
+
     /**
      * 最后登录时间
      */
     private Date lastLoginDate;
+
     /**
      * 创建时间
      */
     private Date createdDate;
+
     /**
      * 修改时间
      */
     private Date modifiedDate;
+
     /**
      * 状态 0启用 1停用
      */
-    @TableLogic
     private String isDelete;
 
 

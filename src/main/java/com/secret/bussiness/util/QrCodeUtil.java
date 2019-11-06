@@ -252,7 +252,6 @@ public class QrCodeUtil  {
      *            输出流
      * @param needCompress
      *            是否压缩LOGO
-     * @throws Exception
      */
     public static void encode(String content, String imgPath, OutputStream output, boolean needCompress)
             throws Exception {
@@ -267,7 +266,6 @@ public class QrCodeUtil  {
      *            内容
      * @param output
      *            输出流
-     * @throws Exception
      */
     public static void encode(String content, OutputStream output) throws Exception {
         QrCodeUtil.encode(content, null, output, false);
