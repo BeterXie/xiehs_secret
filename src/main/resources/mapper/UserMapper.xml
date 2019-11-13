@@ -13,5 +13,14 @@
         from user
         where nike_name=#{userName}
     </select>
+    <select id="getUserList" resultType="com.secret.bussiness.biz.entity.User">
+        select  <include refid="Base_Column_List"/>
+        from user
+        <where>
+            <if test="map.name!=null and map.name!=''">
+                nike_name like  concat('%',#{map.name},'%')
+            </if>
+        </where>
+    </select>
 
 </mapper>

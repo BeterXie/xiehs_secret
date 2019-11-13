@@ -63,27 +63,9 @@ public class AlipayUtil {
         return response.getBody();
     }
     public static AlipayTradePrecreateResponse tradePrecreatePayToResponse(AlipayTradePrecreateModel model, String notifyUrl) throws AlipayApiException{
-        /*AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
-        //构造client，设置公共请求参数
-        AlipayClient alipayClient = new DefaultAlipayClient(AlipayUtil.setCertAlipayRequest());
-        //request.setBizModel(model);
-        request.setBizContent("{" +
-                "    \"out_trade_no\":\"20150320010101002\"," +//商户订单号
-                "    \"total_amount\":\"88.88\"," +
-                "    \"subject\":\"Iphone6 16G\"," +
-                "    \"store_id\":\"NJ_001\"," +
-                "    \"timeout_express\":\"90m\"}");//订单允许的最晚付款时间
-        //request.setNotifyUrl(notifyUrl);
-        logger.info("请求扫码支付");
-        return alipayClient.execute(request);*/
         AlipayClient alipayClient = new DefaultAlipayClient(AlipayUtil.setCertAlipayRequest()); //获得初始化的AlipayClient
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();//创建API对应的request类
-        request.setBizContent("{" +
-                "\"out_trade_no\":\"20150320010101002\"," +//商户订单号
-                "\"total_amount\":\"88.88\"," +
-                "\"subject\":\"Iphone6 16G\"," +
-                "\"store_id\":\"NJ_001\"," +
-                "\"timeout_express\":\"90m\"}");//订单允许的最晚付款时间
+        request.setBizModel(model);
         AlipayTradePrecreateResponse response = alipayClient.certificateExecute(request);
         System.out.print(response.getBody());
         return response;

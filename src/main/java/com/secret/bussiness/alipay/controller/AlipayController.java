@@ -122,10 +122,10 @@ public class AlipayController  extends BaseController {
      */
     @RequestMapping(value="/alipay.action",params = "qrCodes")
     public void tradePrecreatePay(HttpServletRequest request, HttpServletResponse responses) {
-        this.logger.info("扫码支付ss");
-        String subject = "Javen";
-        String totalAmount = "86";
-        String storeId = "123";
+        this.logger.info("扫码支付ss11");
+        String subject = "Javen11";
+        String totalAmount = "861";
+        String storeId = "123ssssss";
         String notifyUrl = "https://www.baidu.com";
 
         AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();

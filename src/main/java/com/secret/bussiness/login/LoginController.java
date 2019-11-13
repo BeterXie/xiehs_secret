@@ -7,7 +7,6 @@ import com.secret.bussiness.constant.Constant;
 import com.secret.bussiness.util.JSONUtil;
 import com.secret.bussiness.util.JwtUtil;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,16 +53,5 @@ public class LoginController extends BaseController {
         System.out.println(request.getParameter("data"));
     }
 
-    @RequestMapping(value = "/getUser.action")
-    public void getUser(HttpServletRequest request, HttpServletResponse response) throws Exception{
-        String names = request.getParameter("name");
-        if(StringUtils.isBlank(names)){
-          this.renderJson(response,"信息有误");
-          return;
-        }
-        this.logger.info("开始获取用户信息");
-        User name = userService.getUser(names);
-        this.renderJson(response,name);
 
-    }
 }
