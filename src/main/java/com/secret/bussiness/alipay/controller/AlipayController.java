@@ -148,6 +148,24 @@ public class AlipayController  extends BaseController {
         }
     }
 
+    /**
+     * 扫码支付
+     */
+    @RequestMapping(value="/creatQrCodes.action")
+    public void creatQrCodes(HttpServletRequest request, HttpServletResponse responses) {
+        this.logger.info("生成二维码");
+        //流输出
+        ServletOutputStream sos = null;
+        try {
+            String qr_code = "https://www.betu-biotech.com/#/index";
+            sos = responses.getOutputStream();
+            //生成二维码s
+            QrCodeUtil.encode(qr_code, sos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

@@ -5,6 +5,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Encoder;
@@ -35,9 +36,9 @@ public class QrCodeUtil  {
     // 二维码尺寸
     private static final int QRCODE_SIZE = 300;
     // LOGO宽度
-    private static final int WIDTH = 60;
+    private static final int WIDTH = 80;
     // LOGO高度
-    private static final int HEIGHT = 60;
+    private static final int HEIGHT = 80;
 
 
     /**
@@ -126,7 +127,6 @@ public class QrCodeUtil  {
      *            LOGO图片地址
      * @param needCompress
      *            是否压缩
-     * @throws Exception
      */
     private static void insertImage(BufferedImage source, String imgPath, boolean needCompress) throws Exception {
         File file = new File(imgPath);
@@ -134,6 +134,7 @@ public class QrCodeUtil  {
             System.err.println("" + imgPath + "   该文件不存在！");
             return;
         }
+
         Image src = ImageIO.read(new File(imgPath));
         int width = src.getWidth(null);
         int height = src.getHeight(null);
@@ -173,7 +174,6 @@ public class QrCodeUtil  {
      *            存放目录
      * @param needCompress
      *            是否压缩LOGO
-     * @throws Exception
      */
     public static void encode(String content, String imgPath, String destPath, boolean needCompress) throws Exception {
         BufferedImage image = QrCodeUtil.createImage(content, imgPath, needCompress);
@@ -207,7 +207,6 @@ public class QrCodeUtil  {
      *            LOGO地址
      * @param destPath
      *            存储地址
-     * @throws Exception
      */
     public static void encode(String content, String imgPath, String destPath) throws Exception {
         QrCodeUtil.encode(content, imgPath, destPath, false);
@@ -222,7 +221,6 @@ public class QrCodeUtil  {
      *            存储地址
      * @param needCompress
      *            是否压缩LOGO
-     * @throws Exception
      */
     public static void encode(String content, String destPath, boolean needCompress) throws Exception {
         QrCodeUtil.encode(content, null, destPath, needCompress);
@@ -235,7 +233,6 @@ public class QrCodeUtil  {
      *            内容
      * @param destPath
      *            存储地址
-     * @throws Exception
      */
     public static void encode(String content, String destPath) throws Exception {
         QrCodeUtil.encode(content, null, destPath, false);
@@ -271,6 +268,17 @@ public class QrCodeUtil  {
         QrCodeUtil.encode(content, null, output, false);
     }
 
+    /**
+     *
+     * @param inputPath
+     *        原文件
+     * @param outputPath
+     *        压缩后
+     */
+    public static void yasuoImg(String inputPath,String outputPath) throws Exception{
+        Thumbnails.of(inputPath).scale(0.6F).toFile(outputPath);
+    }
+
 
 
     /**
@@ -282,19 +290,20 @@ public class QrCodeUtil  {
      * @date 2019/5/30 19:27
      */
     public static void main(String[] args) throws Exception {
-/*
         try {
-            String text = "http://www.baidu.com";
+            String text = "https://www.betu-biotech.com/#/index";
             // 不指定logo
-            QrCodeUtil.encode(text, null, "d:\\", "qrcode", true);
+            //QrCodeUtil.encode(text, "d:\\", "qrcode", true);
             // 指定logo
-            QrCodeUtil.encode(text, "d:\\logo.jpg", "d:\\", "qrcode1", true);
+            QrCodeUtil.encode(text, "d:/logo.jpg", "d:/", true);
+            QrCodeUtil.encode(text, "d:/logo1.jpg", "d:/", true);
+            //QrCodeUtil.yasuoImg("d:/logo.jpg","d:/yasuo.jpg");
         }
         catch (Exception e) {
             System.out.println(e);
-        }*/
-        //  ImageIO.write(getBufferImage("4545454545", 500, 500), "jpg", new File("c:\\qrCode.jpg"));
-        System.out.println("--base64--" + getBase64("4545454545", 500, 500));
+        }
+        //ImageIO.write(getBufferImage("https://www.betu-biotech.com/#/index", 500, 500), "jpg", new File("d:\\qrCode.jpg"));
+        //System.out.println("--base64--" + getBase64("4545454545", 500, 500));
     }
 
 
