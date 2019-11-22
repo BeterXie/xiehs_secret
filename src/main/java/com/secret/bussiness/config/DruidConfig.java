@@ -94,8 +94,9 @@ public class DruidConfig {
         return filterRegistrationBean;
     }
 
-    @Bean
+    @Bean(initMethod = "init")
     public DataSource druidDataSource() {
+        logger.info("开始初始化数据源");
         DruidDataSource datasource = new DruidDataSource();
         datasource.setUrl(dbUrl);
         datasource.setUsername(username);

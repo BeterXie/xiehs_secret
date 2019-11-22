@@ -1,15 +1,12 @@
 package com.secret.bussiness.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import com.secret.bussiness.config.JsonDateValueProcessor;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import org.apache.commons.beanutils.BeanUtils;
+
+import java.util.*;
 
 /**
  * @author xiehs
@@ -21,7 +18,9 @@ public class JSONUtil {
      * 将List对象序列化为JSON文本
      */
     public static <T> String toJSONString(List<T> list) {
-        JSONArray jsonArray = JSONArray.fromObject(list);
+        JsonConfig jsonConfig = new JsonConfig();
+        jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
+        JSONArray jsonArray = JSONArray.fromObject(list,jsonConfig);
         return jsonArray.toString();
     }
 
@@ -32,7 +31,9 @@ public class JSONUtil {
      * @return
      */
     public static String toJSONString(Object object) {
-        JSONObject jsonObject = JSONObject.fromObject(object);
+        JsonConfig jsonConfig = new JsonConfig();
+        jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
+        JSONObject jsonObject = JSONObject.fromObject(object,jsonConfig);
         return jsonObject.toString();
     }
 
