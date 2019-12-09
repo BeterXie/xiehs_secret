@@ -16,7 +16,7 @@ public class MysqlGenerator {
 
 	private static final String PACKAGE_NAME = "com.secret.bussiness";
 	private static final String MODULE_NAME = "biz";
-	private static final String OUT_PATH = "C:/Users/2025/git/xiehs_secret";
+	private static final String OUT_PATH = "D:/jiahua_project/xiehs";
 	private static final String JAVACLASS_PATH = "/src/main/java";
 	private static final String MAPPER_PATH = "/src/main/resources/mapper/";
 	private static final String AUTHOR = "xiehs";
@@ -88,12 +88,12 @@ public class MysqlGenerator {
 								.setSuperControllerClass("com.secret.bussiness.base.BaseController")
 								// 【实体】是否生成字段常量（默认 false）
 								// public static final String ID = "test_id";
-								.setEntityColumnConstant(true)
+								//.setEntityColumnConstant(true)
 								// 【实体】是否为构建者模型（默认 false）
 								// public User setName(String name) {this.name = name; return this;}
-								.setEntityBuilderModel(true)
+								//.setEntityBuilderModel(true)
 								// 【实体】是否为lombok模型（默认 false）<a href="https://projectlombok.org/">document</a>
-								.setEntityLombokModel(true)
+								//.setEntityLombokModel(true)
 				// Boolean类型字段是否移除is前缀处理
 				// .setEntityBooleanColumnRemoveIsPrefix(true)
 				// .setRestControllerStyle(true)

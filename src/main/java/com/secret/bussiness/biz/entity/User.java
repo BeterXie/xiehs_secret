@@ -1,14 +1,10 @@
 package com.secret.bussiness.biz.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -16,11 +12,8 @@ import java.util.Date;
  * </p>
  *
  * @author xiehs
- * @since 2019-11-06
+ * @since 2019-12-09
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 public class User extends Model<User> {
 
     private static final long serialVersionUID=1L;
@@ -72,27 +65,95 @@ public class User extends Model<User> {
     private String isDelete;
 
 
-    public static final String USER_ID = "user_id";
+    public Long getUserId() {
+        return userId;
+    }
 
-    public static final String NIKE_NAME = "nike_name";
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-    public static final String REAL_NAME = "real_name";
+    public String getNikeName() {
+        return nikeName;
+    }
 
-    public static final String SEX = "sex";
+    public void setNikeName(String nikeName) {
+        this.nikeName = nikeName;
+    }
 
-    public static final String AGE = "age";
+    public String getRealName() {
+        return realName;
+    }
 
-    public static final String LAST_LOGIN_DATE = "last_login_date";
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
 
-    public static final String CREATED_DATE = "created_date";
+    public String getSex() {
+        return sex;
+    }
 
-    public static final String MODIFIED_DATE = "modified_date";
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 
-    public static final String IS_DELETE = "is_delete";
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
 
     @Override
     protected Serializable pkVal() {
         return this.userId;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+        "userId=" + userId +
+        ", nikeName=" + nikeName +
+        ", realName=" + realName +
+        ", sex=" + sex +
+        ", age=" + age +
+        ", lastLoginDate=" + lastLoginDate +
+        ", createdDate=" + createdDate +
+        ", modifiedDate=" + modifiedDate +
+        ", isDelete=" + isDelete +
+        "}";
+    }
 }

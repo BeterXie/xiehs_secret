@@ -1,10 +1,12 @@
 package com.secret.bussiness.util;
 
+import com.secret.bussiness.biz.entity.User;
 import com.secret.bussiness.constant.Constant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
@@ -41,9 +43,8 @@ public class JwtUtil {
      * @param subject
      * @param ttlMillis
      * @return
-     * @throws Exception
      */
-    public String createJWT(String id, String issuer, String subject, long ttlMillis) throws Exception {
+    public String createJWT(String id, String issuer, String subject, long ttlMillis) {
 
         // 指定签名的时候使用的签名算法，也就是header那部分，jjwt已经将这部分内容封装好了。
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
@@ -84,9 +85,8 @@ public class JwtUtil {
      *
      * @param jwt
      * @return
-     * @throws Exception
      */
-    public Claims parseJWT(String jwt) throws Exception {
+    public Claims parseJWT(String jwt) {
         SecretKey key = generalKey();  //签名秘钥，和生成的签名的秘钥一模一样
         Claims claims = Jwts.parser()  //得到DefaultJwtParser
                 .setSigningKey(key)                 //设置签名的秘钥
@@ -96,11 +96,10 @@ public class JwtUtil {
 
     public static void main(String[] args) {
 
-        /*User user = new User();
-        user.setNikeName("摸鱼");
-        user.setRealName("谢散散");
-        user.setAge(12);
-        user.setSex(1);
+        User user = new User();
+        user.setAge(18);
+        user.setRealName("小11");
+        user.setNikeName("真实姓名");
         String subject = JSONUtil.toJSONString(user);
 
         try {
@@ -115,14 +114,15 @@ public class JwtUtil {
             System.out.println(c.getIssuedAt());
             System.out.println(c.getSubject());
             User user2 = JSONUtil.toBean(c.getSubject(),User.class);
-            System.out.println("user2 nickName"+user2.getNikeName());
+            System.out.println("user2 nickName:"+user2.getNikeName());
             System.out.println(c.getIssuer());
             System.out.println(c.get("uid", String.class));
             System.out.println(c.get("user_name"));
 
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
 
     }
+
 }

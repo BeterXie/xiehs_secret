@@ -6,6 +6,7 @@ import com.secret.bussiness.biz.service.IUserService;
 import com.secret.bussiness.constant.Constant;
 import com.secret.bussiness.util.JSONUtil;
 import com.secret.bussiness.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +51,11 @@ public class LoginController extends BaseController {
     public void getJwtInfo(HttpServletRequest request, HttpServletResponse response) throws  Exception{
         this.logger.info("开始解密");
         JSONObject requestBody = this.getRequestBody(request);
-        System.out.println(request.getParameter("data"));
+        String token = requestBody.getString("token");
+        JwtUtil util = new JwtUtil();
+        Claims c = util.parseJWT(token);
+        User user2 = JSONUtil.toBean(c.getSubject(),User.class);
+        this.renderJson(response,user2);
     }
 
 

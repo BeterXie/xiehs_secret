@@ -67,7 +67,7 @@
         <appender name="ROLLING"
                   class="ch.qos.logback.core.rolling.RollingFileAppender">
             <!-- 文件路径 -->
-            <file>/web/apache-tomcat-8.0.44/run_jar/logs/log.log</file>
+            <file>/web/xiehs_secret/logs/log.log</file>
             <rollingPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <!-- rollover daily -->
