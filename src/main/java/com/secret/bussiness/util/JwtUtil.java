@@ -94,7 +94,7 @@ public class JwtUtil {
         return claims;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         User user = new User();
         user.setAge(18);
@@ -123,6 +123,12 @@ public class JwtUtil {
             e.printStackTrace();
         }
 
+    }*/
+
+    public static void main(String[] args) {
+        Long l = 1l;
+        String s = "1";
+        System.out.println(s.equals(l));
     }
 
 }
