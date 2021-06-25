@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         ISearchService searchService = new SearchServiceImpl();
-        searchService.getProductList("CQ7740-001");
+        searchService.getProductList("CQ7740-001",null);
         /*SearchJsonRootBean searchResult = searchService.getSearchResult("阿里巴巴");
         Gson searchJson = new GsonBuilder().setPrettyPrinting().create();;
 

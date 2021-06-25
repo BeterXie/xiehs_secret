@@ -3,12 +3,17 @@ package com.secret.bussiness.dewu;
 import com.secret.bussiness.dewu.service.ISearchService;
 import com.secret.bussiness.dewu.service.impl.SearchServiceImpl;
 import com.secret.bussiness.dewu.utils.ExcelExportUtils;
+import com.secret.bussiness.dewu.utils.HttpUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -24,7 +29,7 @@ import java.util.Map;
 
 /**
  * @author xiehs
- * @package cn.xiaoyanol.crawler
+ * @package com.secret.bussiness.dewu
  * @date 2021/6/18  16:35
  */
 public class DewuProductSearch {
@@ -33,7 +38,7 @@ public class DewuProductSearch {
 
     public static void main(String[] args) {
         try {
-            List<Map<String, String>> maps = ExcelExportUtils.redExcel("C:\\Users\\xianbeilin1.xlsx");
+            List<Map<String, String>> maps = ExcelExportUtils.redExcel("G:\\dewu\\xianbeilin.xlsx");
             getExcel(maps);
         }catch (Exception e){
             System.out.println(e);
@@ -53,26 +58,27 @@ public class DewuProductSearch {
     }
 
     public  static  void  getExcel(List<Map<String, String>> maps) throws Exception {
-
             if (!CollectionUtils.isNotEmpty(maps)) {
                 System.out.println("数据为空");
                 return;
             }
             ISearchService searchService = new SearchServiceImpl();
             //List<Map<String, String>> dewuMaps = new ArrayList<>(16);
-            int count = 489;
-            for(Map<String, String> map : maps){
+            int count = 0;
+         Map<String, String> ip = getIp();
+        for(Map<String, String> map : maps){
                 count++;
-                Thread.sleep(5 * 1000);
+                Thread.sleep(500);
                 String name = map.get("品牌名称");
                 String productCode = map.get("款号");
                 String vipPrice = map.get("唯品价");
                 String size = map.get("尺码");
                 logger.info("第"+count+"条商品，当前查询到："+productCode);
-                JSONObject json = searchService.getProductList(productCode);
+                JSONObject json = searchService.getProductList(productCode,ip);
                 if(!json.getJSONObject("data").containsKey("productList")){
                     logger.info("查询次数过多，需要校验验证码");
-                    break;
+                    ip = getIp();
+                    json = searchService.getProductList(productCode,ip);
                 }
                 JSONArray jsonArray = json.getJSONObject("data").getJSONArray("productList");
                 if(jsonArray.size() == 0){
@@ -102,7 +108,7 @@ public class DewuProductSearch {
         }
 
     public  static  void outPutExcel(Map<String, String> dewuMap,int rowNum) throws Exception{
-        String path = "C:\\查询结果"+20210621+".xlsx";
+        String path = "G:\\dewu\\查询结果20210626.xlsx";
         File xlsxFile = new File(path);
 
         //如果文件不存在，创建文件
@@ -149,11 +155,37 @@ public class DewuProductSearch {
         messageList.add(dewuMap.get("profit"));
         Row row1 = sheet.createRow(rowNum);
         for (int i = 0; i < messageList.size(); i++) {
-            row1.createCell(i).setCellValue(messageList.get(i));
+            Cell cell = row1.createCell(i);
+            CellStyle cs = workbook.createCellStyle();
+            if(!dewuMap.get("productCode").equals(dewuMap.get("articleNumber"))){
+                if(i== 1 || i == 2) {
+                    cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);//设置前景填充样式
+                    cs.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+                }
+            }
+            if(i >= 3){
+                cell.setCellType(CellType.NUMERIC);
+                DataFormat df = workbook.createDataFormat(); // 此处设置数据格式
+                cs.setDataFormat(df.getFormat("0.00_ "));// 最关键的是'_ '，最后有个空格别忘了，空格是必须的
+            }
+            cell.setCellValue(messageList.get(i));
+            cell.setCellStyle(cs);
         }
         FileOutputStream outputStream = new FileOutputStream(xlsxFile);
         outputStream.flush();
         workbook.write(outputStream);
         outputStream.close();
+    }
+
+    public static Map<String, String> getIp() throws Exception{
+        String ipUrl="http://piping.mogumiao.com/proxy/api/get_ip_al?appKey=dc295551a29b4c28be1acdcee726d0ca&count=1&expiryDate=0&format=1&newLine=2";
+        HttpResponse httpResponse = HttpUtils.get(ipUrl);
+        String s = EntityUtils.toString(httpResponse.getEntity());
+        JSONObject content = JSONObject.fromObject(s);
+        JSONObject msg = content.getJSONArray("msg").getJSONObject(0);
+        Map<String,String> map = new HashMap<>();
+        map.put("ip",msg.getString("ip"));
+        map.put("port",msg.getString("port"));
+        return map;
     }
 }

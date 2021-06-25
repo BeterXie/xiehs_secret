@@ -13,6 +13,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -80,7 +81,7 @@ public class SearchServiceImpl implements ISearchService {
     }
 
     @Override
-    public  JSONObject  getProductList(String productCode){
+    public  JSONObject  getProductList(String productCode,Map<String, String> iPparams){
         try {
             if (StringUtils.isBlank(productCode)) {
                 return null;
@@ -99,8 +100,12 @@ public class SearchServiceImpl implements ISearchService {
 
             // 拼接URL
             //url += URLEncoder.encode(productCode, "UTF-8");
-
-            HttpResponse response = HttpUtils.get(dewuUrl, paramsMap);
+            HttpResponse response = null;
+            if(iPparams == null){
+                response = HttpUtils.get(dewuUrl, paramsMap);
+            }else {
+                response = HttpUtils.get(dewuUrl, paramsMap,iPparams);
+            }
             String s = EntityUtils.toString(response.getEntity());
             JSONObject content = JSONObject.fromObject(s);
             return  content;

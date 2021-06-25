@@ -3,6 +3,8 @@ package com.secret.bussiness.dewu.service;
 import com.secret.bussiness.dewu.domain.search.SearchJsonRootBean;
 import net.sf.json.JSONObject;
 
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * Description: 获取企业基本信息（含主要人员）
@@ -42,7 +44,7 @@ public interface ISearchService {
     SearchJsonRootBean getSearchResult(String companyName);
 
 
-    JSONObject getProductList(String productCode);
+    JSONObject getProductList(String productCode,Map<String, String> iPparams);
 
     JSONObject getAPPProductList(String productCode);
 
