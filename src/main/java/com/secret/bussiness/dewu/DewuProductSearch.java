@@ -64,11 +64,11 @@ public class DewuProductSearch {
             }
             ISearchService searchService = new SearchServiceImpl();
             //List<Map<String, String>> dewuMaps = new ArrayList<>(16);
-            int count = 0;
+         int count = 0;
          Map<String, String> ip = getIp();
         for(Map<String, String> map : maps){
                 count++;
-                Thread.sleep(500);
+                Thread.sleep(400);
                 String name = map.get("品牌名称");
                 String productCode = map.get("款号");
                 String vipPrice = map.get("唯品价");
