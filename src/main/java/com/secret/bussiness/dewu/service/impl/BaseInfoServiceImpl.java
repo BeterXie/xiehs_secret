@@ -28,11 +28,10 @@ public class BaseInfoServiceImpl implements IBaseInfoService {
 
             // 拼接URL
             String url = UrlConstant.BASE_INFO_URL + companyId;
-            HttpResponse response = HttpUtils.get(url, null);
+            String response = HttpUtils.get(url, null);
 
-            String s = EntityUtils.toString(response.getEntity());
             Gson gson = new Gson();
-            BaseInfoJsonRootBean baseInfoJsonRootBean = gson.fromJson(s, BaseInfoJsonRootBean.class);
+            BaseInfoJsonRootBean baseInfoJsonRootBean = gson.fromJson(response, BaseInfoJsonRootBean.class);
 
             return baseInfoJsonRootBean;
         }catch (Exception e){

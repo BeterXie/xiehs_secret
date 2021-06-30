@@ -1,6 +1,7 @@
 package com.secret.bussiness.dewu.service.impl;
 
 import com.google.gson.Gson;
+import com.secret.bussiness.dewu.DewuProductSearch;
 import com.secret.bussiness.dewu.constant.UrlConstant;
 import com.secret.bussiness.dewu.domain.search.SearchJsonRootBean;
 import com.secret.bussiness.dewu.service.ISearchService;
@@ -10,6 +11,8 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -24,6 +27,8 @@ import java.util.Map;
  * @Time: 下午6:34
  */
 public class SearchServiceImpl implements ISearchService {
+
+    protected static Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);
 
     private String url = UrlConstant.SEARCH_RUL;
     private String dewuUrl = UrlConstant.DEWU_SEARCH_RUL;
@@ -56,10 +61,9 @@ public class SearchServiceImpl implements ISearchService {
             // 拼接URL
             url += URLEncoder.encode(companyName, "UTF-8");
 
-            HttpResponse response = HttpUtils.get(url, paramsMap);
-            String s = EntityUtils.toString(response.getEntity());
+            String response = HttpUtils.get(url, paramsMap);
             Gson gson = new Gson();
-            SearchJsonRootBean searchJsonRootBean = gson.fromJson(s, SearchJsonRootBean.class);
+            SearchJsonRootBean searchJsonRootBean = gson.fromJson(response, SearchJsonRootBean.class);
 
             return searchJsonRootBean;
         }catch (Exception e){
@@ -97,20 +101,28 @@ public class SearchServiceImpl implements ISearchService {
             //paramsMap.put("sign", "bcbd4b331418525c97d99560d2b7c99d");
             String sign = DewuUtils.getSign(paramsMap);
             paramsMap.put("sign", sign);
-
             // 拼接URL
             //url += URLEncoder.encode(productCode, "UTF-8");
-            HttpResponse response = null;
+            String res = null;
+            JSONObject content = null;
             if(iPparams == null){
-                response = HttpUtils.get(dewuUrl, paramsMap);
+                res = HttpUtils.get(dewuUrl, paramsMap);
             }else {
-                response = HttpUtils.get(dewuUrl, paramsMap,iPparams);
+                res = HttpUtils.get(dewuUrl, paramsMap,iPparams);
             }
-            String s = EntityUtils.toString(response.getEntity());
-            JSONObject content = JSONObject.fromObject(s);
+            if( res == null || "Bad Gateway: app.dewu.com:443".equals(res)){
+                res =null;
+            }
+            logger.info("res:"+res);
+            if(res != null && res.contains("data")){
+                content = JSONObject.fromObject(res);
+            }
+            if(content == null || (content.containsKey("code") && "485".equals(content.getString("code"))) || !content.getJSONObject("data").containsKey("productList")){
+                content = this.getProductList(productCode, iPparams);
+            }
             return  content;
         }catch (Exception e){
-
+            e.printStackTrace();
         }
         return null;
     }

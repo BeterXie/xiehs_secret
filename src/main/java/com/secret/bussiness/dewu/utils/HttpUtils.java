@@ -4,14 +4,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
+import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -21,6 +24,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -34,6 +38,9 @@ import java.util.Set;
  * @Time: 下午4:00
  */
 public class HttpUtils {
+
+    public static final String IP = "forward.xdaili.cn";//这里以正式服务器ip地址为准
+    public static final int PORT = 80;//这里以正式服务器端口地址为准
 
     private static void setHttpHeaders(HttpGet httpGet) {
         //设置默认请求头 在浏览器登陆后，把cookie的内容复制到这里设置cookie，不然无法查询
@@ -51,11 +58,9 @@ public class HttpUtils {
         //httpGet.setHeader("X-Remote-IP", "127.0.0.2");
         httpGet.setHeader("Upgrade-Insecure-Requests", "1");
         httpGet.setHeader("referer", "https://servicewechat.com/wx3c12cdd0ae8b1a7b/227/page-frame.html");
-        String ip = randIP();
-        httpGet.setHeader("X-Forwarded-For", ip);
-        httpGet.setHeader("HTTP_X_FORWARDED_FOR", ip);
-        httpGet.setHeader("HTTP_CLIENT_IP", ip);
-        httpGet.setHeader("REMOTE_ADDR", ip);
+        int timestamp = (int) (new Date().getTime()/1000);
+        String sign = authHeader("ZF20216298129cttmO4", "6a89e9c994884072a230ff19a62ad211", timestamp);
+        httpGet.setHeader("Proxy-Authorization",sign);
     }
 
     private static void setDewuAppHttpHeaders(HttpGet httpGet) {
@@ -84,8 +89,8 @@ public class HttpUtils {
      * @return
      * @throws IOException
      */
-    public static HttpResponse get(String url, Map<String, String> params,Map<String, String> iPparams) throws IOException {
-        HttpHost httpHost = new HttpHost(iPparams.get("ip"),Integer.parseInt(iPparams.get("port")));
+    public static String get(String url, Map<String, String> params,Map<String, String> iPparams) {
+        HttpHost httpHost = new HttpHost(IP,PORT);
         //设置请求和传输超时时间
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(5000)
                 .setProxy(httpHost)
@@ -119,9 +124,19 @@ public class HttpUtils {
         //执行HTTP请求
         CloseableHttpClient httpClient = getHttpClient();
         HttpClientContext context = HttpClientContext.create();
-        HttpResponse response = httpClient.execute(httpGet, context);
-
-        return response;
+        HttpResponse response = null;
+        String res = null;
+        try {
+            response = httpClient.execute(httpGet, context);
+            res = EntityUtils.toString(response.getEntity());
+            httpClient.close();
+        }catch (Exception ex){
+            if (httpClient != null) {
+                httpClient.close();
+            }
+        }finally {
+            return  res;
+        }
     }
 
     /**
@@ -131,7 +146,7 @@ public class HttpUtils {
      * @return
      * @throws IOException
      */
-    public static HttpResponse get(String url, Map<String, String> params) throws IOException {
+    public static String get(String url, Map<String, String> params) throws IOException {
         //设置请求和传输超时时间
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(5000)
                 .build();
@@ -165,8 +180,8 @@ public class HttpUtils {
         CloseableHttpClient httpClient = getHttpClient();
         HttpClientContext context = HttpClientContext.create();
         HttpResponse response = httpClient.execute(httpGet, context);
-
-        return response;
+        String s = EntityUtils.toString(response.getEntity());
+        return s;
     }
 
     /**
@@ -183,7 +198,7 @@ public class HttpUtils {
 
         HttpGet httpGet = new HttpGet(url);
         //设置默认请求头
-        setHttpHeaders(httpGet);
+        //setHttpHeaders(httpGet);
         httpGet.setConfig(requestConfig);
 
         //执行HTTP请求
@@ -261,6 +276,19 @@ public class HttpUtils {
         return HttpClients.createDefault();
 
     }
+
+    public static String authHeader(String orderno, String secret, int timestamp){
+        //拼装签名字符串
+        String planText = String.format("orderno=%s,secret=%s,timestamp=%d", orderno, secret, timestamp);
+
+        //计算签名
+        String sign = org.apache.commons.codec.digest.DigestUtils.md5Hex(planText).toUpperCase();
+
+        //拼装请求头Proxy-Authorization的值
+        String authHeader = String.format("sign=%s&orderno=%s&timestamp=%d", sign, orderno, timestamp);
+        return authHeader;
+    }
+
 
 
 }
